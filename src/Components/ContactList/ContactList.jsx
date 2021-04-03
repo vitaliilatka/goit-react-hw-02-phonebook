@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import styles from './ContactsList.module.css';
+import styles from './ContactList.module.css';
 
 const ContactsListItem = ({ name, number, onClickRemove }) => {
   return (
-    <li className="ContactsListItem">
+    <li className={styles.ContactsListItem}>
       <p>
         {name}: {number}
       </p>
       <button
         type="button"
-        className="ContactsList-button"
+        className={styles.ContactsList__button}
         onClick={onClickRemove}
       >
         Delete
@@ -22,11 +22,12 @@ const ContactsListItem = ({ name, number, onClickRemove }) => {
 const ContactsList = ({ filteredContacts, onRemove }) => {
   return (
     filteredContacts.length > 0 && (
-      <ul className="ContactsList">
+      <ul className={styles.ContactsList}>
         {filteredContacts.map(({ id, name, number }) => (
           <ContactsListItem
             key={id}
             name={name}
+            number={number}
             onClickRemove={() => onRemove(id)}
           />
         ))}

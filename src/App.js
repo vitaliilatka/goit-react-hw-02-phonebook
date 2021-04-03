@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-// import { uuid } from 'uuid';
-import ContactsList from './Components/ContactsList/ContactsList';
-import ContactsForm from './Components/ContactsForm/ContactsForm';
+import shortid from 'shortid';
+import ContactList from './Components/ContactList/ContactList';
+import ContactForm from './Components/ContactForm/ContactForm';
 import Container from './Components/Container/Container';
 import Filter from './Components/Filter/Filter';
-// import styles from './styles.css';
+import './styles.css';
 
 class App extends Component {
   state = {
@@ -19,7 +19,7 @@ class App extends Component {
 
   addContact = (name, number) => {
     const newContact = {
-      // id: uuid(),
+      id: shortid.generate(),
       name,
       number,
     };
@@ -55,12 +55,12 @@ class App extends Component {
       <Container>
         <section title="Phonebook" className="Section">
           <h1>Phonebook</h1>
-          <ContactsForm contacts={contacts} onAddContact={this.addContact} />
+          <ContactForm contacts={contacts} onAddContact={this.addContact} />
         </section>
         <section title="Contacts" className="Section">
           <h2>Contacts</h2>
           <Filter value={filter} onChangeFilter={this.handleChangeFilter} />
-          <ContactsList
+          <ContactList
             filteredContacts={this.getFilteredContacts()}
             onRemove={this.handleRemove}
           />
