@@ -21,7 +21,6 @@ Filter.defaultProps = {
 
 Filter.propTypes = {
   value: PropTypes.string,
-  onChangeFilter: PropTypes.func.isRequired,
 };
 
 export default Filter;

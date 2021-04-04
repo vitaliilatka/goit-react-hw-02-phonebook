@@ -28,7 +28,7 @@ export default class ContactsForm extends Component {
     const { name, number } = this.state;
     const { contacts, onAddContact } = this.props;
     const contactInState = contacts.find(
-      contact => contact.name.toLowerCase() === name.toLocaleLowerCase(),
+      contact => contact.name.toLowerCase() === name.toLowerCase(),
     );
     contactInState && alert(`${contactInState.name} is already in contacts!`);
     if (!contactInState && name && number) {
@@ -41,7 +41,7 @@ export default class ContactsForm extends Component {
   render() {
     const { name, number } = this.state;
     return (
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <h3>Name</h3>
         <label>
           <input
