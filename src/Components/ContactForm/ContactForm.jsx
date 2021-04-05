@@ -1,80 +1,65 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ContactForm.module.css';
 
-const InitialState = {
+const initialState = {
   name: '',
   number: '',
 };
 
-export default class ContactsForm extends Component {
-  state = InitialState;
+const ContactForm = ({ onSubmit }) => {
+  const [inputValue, setInputValue] = useState(initialState);
+  const { name, number } = inputValue;
 
-  handleChange = (type, e) => {
-    const { contacts } = this.props;
-    if (type === 'name') {
-      const contactInState = contacts.find(
-        contact => contact.name.toLowerCase() === e.target.value.toLowerCase(),
-      );
-      if (contactInState) {
-        alert(`${contactInState.name} is already in contacts!`);
-      }
-    }
-    this.setState({ [type]: e.target.value });
+  const changeInput = e => {
+    const { name, value } = e.currentTarget;
+    setInputValue({ ...inputValue, [name]: value });
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const { name, number } = this.state;
-    const { contacts, onAddContact } = this.props;
-    const contactInState = contacts.find(
-      contact => contact.name.toLowerCase() === name.toLowerCase(),
-    );
-    contactInState && alert(`${contactInState.name} is already in contacts!`);
-    if (!contactInState && name && number) {
-      onAddContact(name, number);
-      this.setState(InitialState);
-      return;
-    }
+    onSubmit(name, number);
+    setInputValue(initialState);
+    e.currentTarget.reset();
   };
 
-  render() {
-    const { name, number } = this.state;
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <h3>Name</h3>
-        <label>
-          <input
-            type="text"
-            value={name}
-            onChange={e => this.handleChange('name', e)}
-          />
-        </label>
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <h3>Name</h3>
+      <label>
+        <input
+          type="text"
+          name="name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+          required
+          placeholder="Enter your name"
+          onChange={changeInput}
+        />
         <br />
-        <h3>Number</h3>
-        <label>
-          <input
-            type="tel"
-            value={number}
-            onChange={e => this.handleChange('number', e)}
-          />
-        </label>
+      </label>
+      <h3>Number</h3>
+      <label>
+        <input
+          type="tel"
+          name="number"
+          pattern="(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})"
+          title="Номер телефона должен состоять из 11-12 цифр и может содержать цифры, пробелы, тире, пузатые скобки и может начинаться с +"
+          required
+          placeholder="Enter your number"
+          onChange={changeInput}
+        />
         <br />
-        <button type="submit" className={styles.buttonForm}>
-          Add contact
-        </button>
-      </form>
-    );
-  }
-}
-
-ContactsForm.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.exact({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    }),
-  ),
-  onAddContact: PropTypes.func.isRequired,
+      </label>
+      <button type="submit" className={styles.buttonForm}>
+        Add contact
+      </button>
+    </form>
+  );
 };
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
+
+export default ContactForm;
